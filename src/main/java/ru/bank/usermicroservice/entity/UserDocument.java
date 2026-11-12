@@ -19,14 +19,11 @@ public class UserDocument {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "inn")
-    private Integer inn;
+    @Column(name = "passport_series", length = 4)
+    private String passportSeries;
 
-    @Column(name = "passport_series")
-    private Integer passportSeries;
-
-    @Column(name = "passport_number")
-    private Integer passportNumber;
+    @Column(name = "passport_number", length = 6)
+    private String passportNumber;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)

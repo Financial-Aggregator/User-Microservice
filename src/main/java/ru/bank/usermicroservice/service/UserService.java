@@ -9,8 +9,9 @@ import ru.bank.usermicroservice.exception.UserNotFoundException;
 import ru.bank.usermicroservice.mapper.UserMapper;
 import ru.bank.usermicroservice.repository.*;
 
-import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +24,8 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toResponse)
-                .toList();
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toResponse);
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +62,6 @@ public class UserService {
 
         if (request.getDocument() != null) {
             UserDocument document = UserDocument.builder()
-                    .inn(request.getDocument().getInn())
                     .passportSeries(request.getDocument().getPassportSeries())
                     .passportNumber(request.getDocument().getPassportNumber())
                     .user(user)
@@ -87,6 +85,9 @@ public class UserService {
             contact.setEmail(request.getContact().getEmail());
             userContactRepository.save(contact);
             user.setContact(contact);
+        } else if (user.getContact() != null) {
+            userContactRepository.delete(user.getContact());
+            user.setContact(null);
         }
 
         if (request.getAddress() != null) {
@@ -97,16 +98,21 @@ public class UserService {
             address.setFactAddress(request.getAddress().getFactAddress());
             userAddressRepository.save(address);
             user.setAddress(address);
+        } else if (user.getAddress() != null) {
+            userAddressRepository.delete(user.getAddress());
+            user.setAddress(null);
         }
 
         if (request.getDocument() != null) {
             UserDocument document = userDocumentRepository.findByUser_UserId(id)
                     .orElseGet(() -> UserDocument.builder().user(user).build());
-            document.setInn(request.getDocument().getInn());
             document.setPassportSeries(request.getDocument().getPassportSeries());
             document.setPassportNumber(request.getDocument().getPassportNumber());
             userDocumentRepository.save(document);
             user.setDocument(document);
+        } else if (user.getDocument() != null) {
+            userDocumentRepository.delete(user.getDocument());
+            user.setDocument(null);
         }
 
         return userMapper.toResponse(userRepository.save(user));

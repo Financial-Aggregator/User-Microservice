@@ -20,7 +20,7 @@ public class UserContact {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
     @Column(name = "email")

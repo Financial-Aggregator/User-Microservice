@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import ru.bank.usermicroservice.dtos.*;
 import ru.bank.usermicroservice.service.UserService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,8 +21,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<Page<UserResponse>> getAllUsers(
+            @PageableDefault(size = 20, sort = "lastName") Pageable pageable) {
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
     @GetMapping("/{id}")

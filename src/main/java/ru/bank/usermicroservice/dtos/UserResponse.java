@@ -12,7 +12,7 @@ public class UserResponse {
     private String lastName;
     private String middleName;
     private UserStatus status;
-    private Integer inn;
+    private String inn;
     private UserContactDto contact;
     private UserAddressDto address;
     private UserDocumentDto document;

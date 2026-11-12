@@ -19,13 +19,13 @@ public class UserAddress {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "index")
-    private Integer index;
+    @Column(name = "index", length = 6)
+    private String index;
 
-    @Column(name = "reg_address")
+    @Column(name = "reg_address", length = 500)
     private String regAddress;
 
-    @Column(name = "fact_address")
+    @Column(name = "fact_address", length = 500)
     private String factAddress;
 
     @OneToOne(fetch = FetchType.LAZY)
