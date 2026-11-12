@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: user-db
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d userdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bank-network
+
+  app:
+    build: .
+    container_name: user-microservice
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: userdb
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "1010:1010"
+    networks:
+      - bank-network
+
+networks:
+  bank-network:
+    external: true
+
+volumes:
+  postgres_data:
