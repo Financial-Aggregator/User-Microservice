@@ -1,0 +1,3 @@
+[submodule "proto-contracts"]
+	path = src/main/proto-contracts
+	url = https://github.com/Financial-Aggregator/Proto-Submodule.git

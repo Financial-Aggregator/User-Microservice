@@ -34,6 +34,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
       - "1010:1010"
+      - "9090:9090"
     networks:
       - bank-network
 
