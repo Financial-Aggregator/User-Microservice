@@ -24,17 +24,17 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public Page<UserResponse> getAllUsers(Pageable pageable) {
+    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable).map(userMapper::toResponse);
     }
 
     @Transactional(readOnly = true)
-    public UserResponse getUserById(UUID id) {
+    public UserResponseDto getUserById(UUID id) {
         return userMapper.toResponse(findUserOrThrow(id));
     }
 
     @Transactional
-    public UserResponse createUser(CreateUserRequest request) {
+    public UserResponseDto createUser(CreateUserRequest request) {
         User user = userMapper.toEntity(request);
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
@@ -74,7 +74,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateUser(UUID id, UpdateUserRequest request) {
+    public UserResponseDto updateUser(UUID id, UpdateUserRequest request) {
         User user = findUserOrThrow(id);
         userMapper.updateEntityFromRequest(request, user);
 

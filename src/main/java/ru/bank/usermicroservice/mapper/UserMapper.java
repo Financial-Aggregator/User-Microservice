@@ -22,7 +22,7 @@ public interface UserMapper {
     @Mapping(target = "contact", expression = "java(toContactDto(user.getContact()))")
     @Mapping(target = "address", expression = "java(toAddressDto(user.getAddress()))")
     @Mapping(target = "document", expression = "java(toDocumentDto(user.getDocument()))")
-    UserResponse toResponse(User user);
+    UserResponseDto toResponse(User user);
 
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "contact", ignore = true)
